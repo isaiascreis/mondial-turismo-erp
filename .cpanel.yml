@@ -2,5 +2,6 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/math2367/public_html/sistemanovo/
-    - /bin/cp -r dist/public/. $DEPLOYPATH
+    - /usr/local/cpanel/3rdparty/bin/git --git-dir=/home/math2367/repositories/mondial-turismo-erp/.git --work-tree=/home/math2367/repositories/mondial-turismo-erp checkout main -f
+    - /bin/cp -r /home/math2367/repositories/mondial-turismo-erp/dist/public/. $DEPLOYPATH
 
