@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/math2367/public_html/sistemanovo/
+    - /bin/cp -R * $DEPLOYPATH
