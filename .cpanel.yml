@@ -2,5 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/math2367/public_html/sistemanovo/
-    - /bin/rsync -a dist/public/ $DEPLOYPATH
+    - /bin/cp -r dist/public/. $DEPLOYPATH
 
