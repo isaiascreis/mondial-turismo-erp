@@ -1,0 +1,17 @@
+{
+  "name": "servidor-whatsapp-render",
+  "version": "1.0.0",
+  "description": "Servidor de conexao WhatsApp para o ERP Mondial",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.23.0"
+  }
+}

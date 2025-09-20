@@ -1,0 +1,751 @@
+/* style.css (V5.2 - Versão Funcional + Correções do Layout do Chat) */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+:root {
+  --primary-color: #5e72e4;
+  --primary-hover: #324cdd;
+  --danger-color: #f5365c;
+  --background-color: #f8f9fe;
+  --card-bg-color: #ffffff;
+  --text-primary: #525f7f;
+  --text-secondary: #8898aa;
+  --border-color: #e9ecef;
+  --shadow: 0 0 2rem 0 rgba(136, 152, 170, .15);
+  --border-radius: 0.375rem;
+}
+
+/* Base */
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+/* Layout raiz */
+.app-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+  transition: grid-template-columns 0.3s ease-in-out;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: var(--card-bg-color);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.logo-img {
+  max-width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  padding: 0 1rem;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  border-radius: var(--border-radius);
+  transition: all 0.2s ease-in-out;
+  font-weight: 600;
+}
+.nav-item:hover { background-color: #f6f9fc; color: #32325d; }
+.nav-item.active { background-color: #f6f9fc; color: var(--primary-color); }
+.nav-icon {
+  font-size: 0.9rem;
+  width: 24px;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+/* Conteúdo principal */
+.main-content { display: flex; flex-direction: column; }
+.header {
+  background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
+  padding: 2rem 1.5rem;
+  color: white;
+}
+.header-body {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.header-body h1 {
+  margin: 0; font-size: 1.75rem; font-weight: 700;
+}
+.content-body { padding: 1.5rem; flex-grow: 1; }
+
+/* Cards */
+.card {
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+.card-header {
+  padding: 1rem 1.5rem;
+  background-color: #fcfcfd;
+  border-bottom: 1px solid var(--border-color);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.card-header h3 { margin: 0; font-size: 1.1rem; color: #32325d; }
+.card-body { padding: 1.5rem; }
+.table-responsive { padding: 0; }
+
+/* Filtros */
+.filters-container { display: flex; gap: 1rem; align-items: center; }
+.filters-container input,
+.filters-container select {
+  width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #cad1d7;
+  border-radius: var(--border-radius); font-size: 0.9rem;
+}
+.filters-container input { flex-grow: 1; }
+
+/* Botões */
+.primary-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: 1px solid var(--primary-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+  transition: all 0.15s ease;
+}
+.primary-button:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+#limpar-filtros-btn,
+.secondary-button {
+  background-color: white;
+  color: var(--text-secondary);
+  border: 1px solid #cad1d7;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Tabela (vendas/listas) */
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.sales-table th,
+.sales-table td {
+  padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle;
+}
+.sales-table th {
+  background-color: #f6f9fc; font-weight: 600; text-transform: uppercase;
+  font-size: 0.75rem; color: var(--text-secondary);
+}
+.sales-table tbody tr:hover { background-color: #f6f9fc; }
+
+/* Status tags (globais) */
+.status {
+  padding: 0.25rem 0.8rem;
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+.status.orçamento,
+.status.pendente,
+.status.Pré-venda { background-color: #fff2d2; color: #ff9900; }
+.status.venda,
+.status.confirmado,
+.status.liquidado,
+.status.Confirmado { background-color: #d1fae5; color: #047857; }
+.status.cancelada,
+.status.Cancelada { background-color: #fee2e2; color: #b91c1c; }
+.status.parcial,
+.status.Parcial { background-color: #fef3c7; color: #92400e; }
+
+/* ===================================================================
+   LAYOUT E COMPONENTES DO MÓDULO DE CHAT (WHATSAPP)
+   =================================================================== */
+
+/* Quando o chat está ativo (tela dedicada) */
+.app-layout.whatsapp-active {
+  height: 100vh; overflow: hidden;
+}
+.app-layout.whatsapp-active .main-content,
+.app-layout.whatsapp-active .content-body,
+.app-layout.whatsapp-active .content-body .card,
+.app-layout.whatsapp-active .card-body {
+  display: flex; flex-direction: column; flex-grow: 1;
+}
+.app-layout.whatsapp-active .content-body { padding: 0; }
+.app-layout.whatsapp-active .content-body .card {
+  margin-bottom: 0; border: none; box-shadow: none; border-radius: 0;
+}
+.app-layout.whatsapp-active .card-body { padding: 0; }
+
+/* Botão para recolher/expandir a sidebar no chat */
+#sidebar-toggle-btn {
+  position: absolute; top: 18px; left: 15px; z-index: 2001;
+  background-color: var(--primary-color); color: white; border: none; border-radius: 50%;
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 4px 6px rgba(50,50,93,.11);
+  opacity: 0; transform: translateX(-60px); transition: all 0.3s ease-in-out;
+}
+#sidebar-toggle-btn.visible { opacity: 1; transform: translateX(0); }
+
+/* Sidebar recolhível (layout geral) */
+.app-layout.sidebar-collapsed { grid-template-columns: 0px 1fr; }
+.app-layout.sidebar-collapsed .sidebar { overflow: hidden; padding: 0; border: none; }
+
+/* Abas (tabs) no WhatsApp */
+.tabs-nav {
+  display: flex; border-bottom: 2px solid var(--border-color); padding: 0 1.5rem; flex-shrink: 0;
+}
+.tab-link {
+  border: none; background: none; padding: 0.8rem 1.2rem; cursor: pointer;
+  font-size: 1rem; font-weight: 600; color: var(--text-secondary);
+  border-bottom: 2px solid transparent; margin-bottom: -2px;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.tab-link:hover { color: var(--text-primary); }
+.tab-link.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+
+/* Conteúdo das abas */
+.tabs-content {
+  flex-grow: 1; display: flex; flex-direction: column; position: relative; overflow: hidden;
+}
+.tabs-content > .tab-pane { display: none; height: 100%; }
+.tabs-content > .tab-pane.active {
+  display: flex; flex-direction: column; flex-grow: 1;
+}
+.tabs-content > .tab-pane#tab-config,
+.tabs-content > .tab-pane#tab-kanban { padding: 1.5rem; }
+
+/* Layout do chat */
+.chat-layout {
+  display: grid; grid-template-columns: 320px 1fr; overflow: hidden; height: 100%;
+}
+.chat-sidebar {
+  border-right: 1px solid var(--border-color);
+  display: flex; flex-direction: column; background-color: #fcfcfd;
+}
+#connection-status-container {
+  padding: 1rem; font-weight: 600; border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+}
+/* Estados de conexão (corrigido) */
+#connection-status { color: var(--danger-color); }
+#connection-status.conectado { color: #2dce89; }
+#connection-status.offline,
+#connection-status.erro { color: var(--danger-color); }
+#connection-status.verificando { color: var(--text-secondary); }
+
+.conversations-list {
+  list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1;
+}
+.conversations-list li {
+  padding: 1rem; cursor: pointer; border-bottom: 1px solid var(--border-color);
+  font-weight: 500; transition: background-color 0.2s;
+}
+.conversations-list li:hover { background-color: #f6f9fc; }
+.conversations-list li.active { background-color: var(--primary-color); color: white; }
+
+/* Área principal do chat */
+.chat-main { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+#chat-window { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
+#chat-window.hidden { display: none; }
+#chat-welcome { margin: auto; text-align: center; color: var(--text-secondary); }
+#chat-welcome i { font-size: 4rem; margin-bottom: 1rem; color: #e9ecef; }
+#chat-header {
+  padding: 1rem; font-weight: 600; border-bottom: 1px solid var(--border-color);
+  background: #f6f9fc; flex-shrink: 0;
+}
+#chat-messages {
+  flex-grow: 1; padding: 1rem; overflow-y: auto; background-color: #f8f9fe;
+  display: flex; flex-direction: column; gap: 0.75rem;
+}
+
+/* Composer */
+.chat-input-area {
+  display: flex; padding: 0.8rem; border-top: 1px solid var(--border-color);
+  background: #f6f9fc; align-items: center; gap: 0.5rem; flex-shrink: 0;
+}
+.chat-input-area textarea {
+  flex-grow: 1; border: 1px solid var(--border-color); border-radius: 1.2rem;
+  padding: 0.8rem 1rem; resize: none;
+}
+.chat-tool-btn {
+  background: none; border: none; font-size: 1.5rem; color: var(--text-secondary);
+  cursor: pointer; padding: 0.5rem;
+}
+.attachment-wrapper { position: relative; }
+emoji-picker { position: absolute; bottom: 50px; left: 0; z-index: 10; }
+emoji-picker.hidden,
+input[type="file"].hidden { display: none; }
+
+/* Bubbles */
+.message-bubble {
+  padding: 0.6rem 1rem; border-radius: 1.2rem; max-width: 70%;
+  line-height: 1.4; word-wrap: break-word;
+}
+.message-bubble.sent {
+  background-color: #e2ffc7; align-self: flex-end; border-bottom-right-radius: 0.2rem;
+}
+.message-bubble.received {
+  background-color: #fff; align-self: flex-start; box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  border: 1px solid #e9ecef; border-bottom-left-radius: 0.2rem;
+}
+
+/* ===================================================================
+   MODAL (GENÉRICO) — versão com .hidden -> display:none (override)
+   =================================================================== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 2000;
+}
+.modal-overlay.hidden { display: none; } /* <- INCORPORADO conforme solicitado */
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  width: 90%;
+  max-width: 600px;
+}
+
+/* ===================================================================
+   OUTROS MÓDULOS / TELAS
+   =================================================================== */
+
+/* Autocomplete (clientes) */
+.autocomplete-container { position: relative; }
+.autocomplete-results {
+  position: absolute; top: 100%; left: 0; right: 0;
+  background-color: white; border: 1px solid var(--border-color); border-top: none;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  z-index: 1000; max-height: 200px; overflow-y: auto; display: none;
+}
+.autocomplete-item { padding: 0.8rem 1rem; cursor: pointer; }
+.autocomplete-item:hover { background-color: #f6f9fc; }
+
+/* Cards de serviço (vendas) */
+.servico-card {
+  background-color: #f6f9fc; border: 1px solid var(--border-color);
+  border-radius: var(--border-radius); margin-bottom: 1rem; overflow: hidden;
+}
+.servico-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.75rem 1rem; background-color: #e9ecef; font-size: 0.9rem; font-weight: 600;
+}
+.servico-header strong i { margin-right: 0.5rem; }
+.remove-servico {
+  border: none; background: none; color: var(--text-secondary);
+  font-size: 1.5rem; font-weight: bold; cursor: pointer; padding: 0 0.5rem; line-height: 1;
+}
+.servico-body {
+  display: grid; grid-template-columns: 2fr 2fr 1.5fr 1.5fr;
+  gap: 1rem; padding: 1rem; align-items: end;
+}
+.servico-body > div { display: flex; flex-direction: column; }
+.servico-body label {
+  font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text-secondary);
+}
+.servico-body input {
+  width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #cad1d7;
+  border-radius: var(--border-radius); font-size: 0.9rem; box-sizing: border-box;
+}
+.servico-valores { display: contents; }
+
+/* Passageiros */
+.passageiros-section { padding: 0 1rem 1rem 1rem; }
+.passageiros-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color);
+}
+.passageiros-header span { font-weight: 600; font-size: 0.9rem; }
+.add-passenger-btn {
+  background-color: var(--primary-color); color: white; border: none; border-radius: 50%;
+  width: 24px; height: 24px; line-height: 24px; text-align: center; cursor: pointer; font-size: 0.8rem;
+}
+
+/* Modal de cadastro rápido */
+#quick-add-client-form .form-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;
+}
+#quick-add-client-form .form-group { margin-bottom: 0; }
+#quick-add-client-form label {
+  font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;
+}
+#quick-add-client-form input { width: 100%; box-sizing: border-box; }
+
+/* Plano de Contas */
+.plano-contas-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+}
+.plano-coluna { display: flex; flex-direction: column; gap: 1rem; }
+.plano-coluna h3 {
+  margin: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;
+}
+.plano-list {
+  min-height: 250px; max-height: 250px; overflow-y: auto;
+  background-color: #f8f9fa; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);
+}
+.plano-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.6rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem;
+}
+.plano-item:last-child { border-bottom: none; }
+.plano-item i { font-size: 0.8rem; color: var(--text-secondary); }
+.delete-btn {
+  border: none; background: none; color: var(--danger-color);
+  font-size: 1.2rem; font-weight: bold; cursor: pointer; padding: 0 0.5rem;
+}
+.add-form {
+  border: 1px solid var(--border-color); border-radius: var(--border-radius);
+  padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem;
+}
+.add-form input, .add-form select { width: 100%; }
+
+/* Contas bancárias (cards) */
+.contas-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;
+}
+.conta-card {
+  border: 1px solid var(--border-color); border-radius: var(--border-radius); background-color: #f8f9fa;
+}
+.conta-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.8rem 1rem; font-weight: 600; border-bottom: 1px solid var(--border-color);
+}
+.conta-card-body { padding: 1rem; display: flex; flex-direction: column; }
+.saldo-label { font-size: 0.8rem; color: var(--text-secondary); }
+.saldo-valor { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); }
+
+/* Info / extrato */
+.info-text {
+  font-size: 1.1rem; font-weight: 600; margin: 0.5rem 0 1rem 0;
+  padding: 0.8rem; background-color: #f6f9fc; border-radius: var(--border-radius);
+}
+.saldo-header { font-size: 1.2rem; color: var(--primary-color); margin: 0; }
+.text-danger { color: #dc3545; }
+.text-success { color: #198754; }
+.conciliado-check { width: 1.2rem; height: 1.2rem; }
+
+/* Comissões */
+.comissao-row {
+  display: grid; grid-template-columns: 2fr 1fr auto auto; gap: 1rem;
+  align-items: center; margin-bottom: 0.8rem;
+}
+.comissao-row input {
+  width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #cad1d7;
+  border-radius: var(--border-radius); font-size: 0.9rem; box-sizing: border-box;
+}
+.comissao-row .action-button { padding: 0.5rem; line-height: 1; }
+
+/* Dashboard */
+.dashboard-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;
+}
+.dashboard-list { list-style: none; padding: 0; margin: 0; }
+.dashboard-list li { padding: 0.8rem 0; border-bottom: 1px solid var(--border-color); }
+.dashboard-list li:last-child { border-bottom: none; }
+.dashboard-list .count { font-weight: 700; color: var(--primary-color); margin-left: 0.5rem; }
+.dashboard-list .names-list { font-size: 0.85rem; color: var(--text-secondary); padding-left: 1rem; margin-top: 0.25rem; }
+.dashboard-list.ranking li { display: flex; justify-content: space-between; }
+.summary-cards-grid .card-detail { font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; }
+
+/* Summary cards */
+.summary-cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem; margin-bottom: 1.5rem;
+}
+.summary-card {
+  background-color: #fff; border-radius: var(--border-radius); padding: 1.25rem;
+  box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 0.25rem;
+  border-left: 4px solid;
+}
+.summary-card .card-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+.summary-card .card-label {
+  font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;
+}
+.summary-card .card-value { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+.profit-tag {
+  font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 10px; color: #fff;
+  width: fit-content; margin-top: 0.5rem;
+}
+.profit-tag.good { background-color: #2dce89; }
+.profit-tag.bad  { background-color: #fb6340; }
+
+/* Plano de pagamentos */
+#pagamentos-container.table-responsive {
+  width: 100%;
+  padding: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e6e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+.payment-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto;
+  font-size: 0.935rem;
+}
+.payment-table thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: #fff; color: #4a5568; text-align: left;
+  padding: 12px 16px; font-weight: 600; border-bottom: 1px solid #e6e8f0; white-space: nowrap;
+}
+.payment-table td {
+  padding: 12px 16px; border-bottom: 1px solid #eef2f7; vertical-align: middle;
+}
+.payment-table tbody tr:nth-child(odd) { background: #fafbff; }
+.payment-table tbody tr:hover { background: #f2f6ff; }
+
+/* Alinhamentos por coluna */
+.payment-table th:nth-child(3),
+.payment-table td:nth-child(3) { text-align: right; }
+.payment-table th:nth-child(5),
+.payment-table td:nth-child(5),
+.payment-table th:nth-child(6),
+.payment-table td:nth-child(6),
+.payment-table th:last-child,
+.payment-table td:last-child {
+  text-align: center; white-space: nowrap;
+}
+.payment-table th:last-child,
+.payment-table td:last-child { width: 80px; }
+
+/* Status no contexto da tabela de pagamentos (escopo) */
+.payment-table .status { background: #edf2ff; color: #3f5bd6; }
+.payment-table .status.pendente { background:#fff5f5; color:#e53e3e; }
+.payment-table .status.parcial  { background:#fffaf0; color:#dd6b20; }
+.payment-table .status.liquidado{ background:#f0fff4; color:#2f855a; }
+
+/* Botão de ação compacto na tabela de pagamentos */
+.payment-table .action-button {
+  width: 34px; height: 34px; display: inline-grid; place-items: center;
+  border: 1px solid #e6e8f0; border-radius: 8px; background: #fff; cursor: pointer;
+}
+.payment-table .action-button:hover { background:#f7faff; }
+
+/* Linha vazia na tabela de pagamentos */
+.payment-table .empty-row td {
+  text-align: center; padding: 28px 16px; color: #8a94a6;
+}
+
+/* Form “Adicionar Pagamento” */
+.add-payment-form {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr 1fr auto;
+  gap: 12px; align-items: end; margin: 10px 0 14px; padding: 1rem;
+  background-color: #f6f9fc; border: 1px solid var(--border-color); border-radius: var(--border-radius);
+}
+.add-payment-form .form-group { margin: 0; }
+.add-payment-form .form-group label {
+  display:block; margin-bottom:6px; font-size:.86rem; color:#6b7280;
+}
+.add-payment-form .form-group input,
+.add-payment-form .form-group select {
+  width: 100%; height: 40px; padding: 0 10px;
+  border: 1px solid #e6e8f0; border-radius: 8px; background:#fff;
+}
+.add-payment-form .primary-button { height: 40px; padding: 0 16px; border-radius: 10px; }
+@media (max-width: 1024px) { .add-payment-form { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  {
+  .add-payment-form { grid-template-columns: 1fr; }
+  .payment-table thead th, .payment-table td { padding: 10px 12px; }
+}
+
+/* Pedidos & Anexos */
+.add-pedido-form {
+  display: grid; grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 1rem; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;
+}
+.anexos-upload-area {
+  border: 2px dashed var(--border-color); border-radius: var(--border-radius);
+  padding: 2rem; text-align: center; cursor: pointer; background-color: #f6f9fc;
+}
+.anexos-upload-area:hover { border-color: var(--primary-color); }
+.anexos-upload-area input[type="file"] { display: none; }
+.anexos-upload-area label { font-weight: 600; color: var(--primary-color); }
+.anexos-upload-area i { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+#anexos-list, #pedidos-list { margin-top: 1rem; }
+
+/* Hotel: horários */
+.hotel-times {
+  display: grid; grid-template-columns: 1fr 1fr;
+  margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e9ecef;
+}
+
+/* Barra global de notificações */
+#global-notification-bar {
+  grid-column: 1 / -1;
+  background-color: #172b4d; color: white; padding: 0.8rem 1.5rem;
+  display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;
+}
+#global-notification-bar.hidden { display: none; }
+.notification-content { display: flex; align-items: center; gap: 0.8rem; }
+#close-notification-bar {
+  background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7;
+}
+#close-notification-bar:hover { opacity: 1; }
+
+/* Formulários globais */
+.form-row {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem; margin-bottom: 1.5rem;
+}
+.form-row:last-child { margin-bottom: 0; }
+.form-group { display: flex; flex-direction: column; }
+.form-group label {
+  font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-secondary);
+}
+.form-group input, .form-group select {
+  width: 100%; box-sizing: border-box;
+}
+
+/* Estados read-only */
+input[readonly] { background-color: #e9ecef; cursor: not-allowed; }
+
+/* 1) Utilitário global para esconder elementos */
+.hidden { display: none !important; }
+
+/* 2) Flex/Grid: permitir que a área de mensagens role e o composer sempre apareça */
+.card-body,
+.tabs-content,
+#tab-atendimento,
+.chat-main,
+#chat-window,
+#chat-messages {
+  min-height: 0; /* evita que filhos estourem e empurrem o composer pra fora */
+}
+
+/* 3) Garante que o layout do chat ocupe o espaço disponível do card */
+.card-body > .tabs-content > .tab-pane#tab-atendimento,
+.chat-layout {
+  height: 100%;
+}
+
+/* 4) Área de mensagens: rolagem sempre disponível */
+#chat-messages {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+/* 5) (Opcional) Se quiser garantir por classe de estado também */
+.chat-main.has-chat #chat-welcome { display: none !important; }
+
+/* ======================= PATCH: Composer sempre visível ======================= */
+
+/* 1) Quando o módulo WhatsApp está ativo, forçamos layout de tela cheia */
+.app-layout.whatsapp-active { height: 100vh; overflow: hidden; }
+.app-layout.whatsapp-active .main-content { display: flex; flex-direction: column; }
+.app-layout.whatsapp-active .content-body { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+.app-layout.whatsapp-active .content-body .card { flex: 1 1 auto; display: flex; flex-direction: column; margin-bottom: 0; }
+.app-layout.whatsapp-active .card-body { flex: 1 1 auto; display: flex; flex-direction: column; padding: 0; min-height: 0; }
+
+/* 2) Abas ocupam todo o card; “atendimento” expande e permite rolagem interna */
+.tabs-content { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+.tabs-content > .tab-pane { min-height: 0; } /* importante p/ grid/overflow */
+.card-body > .tabs-content > .tab-pane#tab-atendimento { flex: 1 1 auto; display: flex; flex-direction: column; padding: 0; min-height: 0; }
+
+/* 3) Grid do chat ocupa tudo e respeita rolagem; mensagens rolam, composer fixa no fim */
+.chat-layout { flex: 1 1 auto; min-height: 0; }
+.chat-main { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+#chat-window { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+#chat-messages { flex: 1 1 auto; overflow-y: auto; min-height: 0; }
+.chat-input-area { flex-shrink: 0; }
+
+/* 4) Garantia adicional: utilitário .hidden e “bem-vindo” fora da tela ao abrir chat */
+.hidden { display: none !important; }
+.chat-main.has-chat #chat-welcome { display: none !important; }
+
+/* ======================= PATCH: Composer sempre visível ======================= */
+
+/* 1) Quando o módulo WhatsApp está ativo, forçamos layout de tela cheia */
+.app-layout.whatsapp-active { height: 100vh; overflow: hidden; }
+.app-layout.whatsapp-active .main-content { display: flex; flex-direction: column; }
+.app-layout.whatsapp-active .content-body { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+.app-layout.whatsapp-active .content-body .card { flex: 1 1 auto; display: flex; flex-direction: column; margin-bottom: 0; }
+.app-layout.whatsapp-active .card-body { flex: 1 1 auto; display: flex; flex-direction: column; padding: 0; min-height: 0; }
+
+/* 2) Abas ocupam todo o card; “atendimento” expande e permite rolagem interna */
+.tabs-content { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+.tabs-content > .tab-pane { min-height: 0; } /* importante p/ grid/overflow */
+.card-body > .tabs-content > .tab-pane#tab-atendimento { flex: 1 1 auto; display: flex; flex-direction: column; padding: 0; min-height: 0; }
+
+/* 3) Grid do chat ocupa tudo e respeita rolagem; mensagens rolam, composer fixa no fim */
+.chat-layout { flex: 1 1 auto; min-height: 0; }
+.chat-main { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+#chat-window { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+#chat-messages { flex: 1 1 auto; overflow-y: auto; min-height: 0; }
+.chat-input-area { flex-shrink: 0; }
+
+/* 4) Garantia adicional: utilitário .hidden e “bem-vindo” fora da tela ao abrir chat */
+.hidden { display: none !important; }
+.chat-main.has-chat #chat-welcome { display: none !important; }
+
+/* ======================= PATCH 2: Composer sempre visível (força 100%) ======================= */
+
+/* 0) Garantias de altura total */
+html, body { height: 100%; }
+
+/* 1) Quando o WhatsApp está ativo, tudo vira coluna flex de altura total */
+.app-layout.whatsapp-active { height: 100vh; overflow: hidden; }
+.app-layout.whatsapp-active .main-content { display: flex; flex-direction: column; min-height: 0; }
+.app-layout.whatsapp-active .content-body { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; padding-bottom: 0; }
+.app-layout.whatsapp-active .content-body .card { flex: 1 1 auto; display: flex; flex-direction: column; margin-bottom: 0; min-height: 0; }
+.app-layout.whatsapp-active .card-body { flex: 1 1 auto; display: flex; flex-direction: column; padding: 0; min-height: 0; }
+
+/* 2) Abas ocupam todo o card e não “comem” a altura com padding inferior */
+.app-layout.whatsapp-active .tabs-content { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; padding: 1rem 1.5rem 0; }
+.app-layout.whatsapp-active .tabs-content > .tab-pane { min-height: 0; }
+
+/* 3) Chat layout SEM min-height fixo, e com height:100% para herdar a altura disponível */
+.app-layout.whatsapp-active .chat-layout { flex: 1 1 auto; min-height: 0; height: 100%; }
+
+/* 4) Cadeia interna do chat com min-height:0 para permitir rolagem de #chat-messages */
+.app-layout.whatsapp-active .chat-main { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.app-layout.whatsapp-active #chat-window { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.app-layout.whatsapp-active #chat-messages { flex: 1 1 auto; overflow-y: auto; min-height: 0; }
+.app-layout.whatsapp-active .chat-input-area { flex-shrink: 0; }
+
+/* 5) Some com o welcome ao abrir conversa, caso o JS tenha falhado */
+.chat-main.has-chat #chat-welcome { display: none !important; }
+
+/* 6) Remove o “limitador” antigo do chat (se existir em alguma folha anterior) */
+.chat-layout { min-height: 0 !important; }
+
+/* 7) Micro-ajustes para telas com pouca altura (ex.: notebooks em 100% de zoom) */
+@media (max-height: 800px) {
+  .header { padding: 1.25rem 1.5rem; }                 /* reduz header roxo */
+  .app-layout.whatsapp-active .tabs-content { padding-top: 0.5rem; }
+  #chat-messages { padding: 0.5rem 1rem; }             /* reduz paddings verticais */
+  .chat-input-area { padding: 0.5rem; }                /* composer mais enxuto */
+  .chat-input-area textarea { padding: 0.6rem 0.8rem; max-height: 88px; }
+}

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERP Mondial Turismo</title>
+
+    <script>
+    (function () {
+      var BAD = /\/mondial\/undefined/i;
+      function sanitizeUrl(u) {
+        if (u == null) return u;
+        var s = String(u);
+        if (BAD.test(s)) {
+          console.warn('[PreBoot] URL inválida bloqueada:', s);
+          return '#';
+        }
+        return u;
+      }
+      try {
+        if (BAD.test(location.href)) {
+          console.warn('[PreBoot] Corrigindo location → #dashboard');
+          history.replaceState(null, '', location.pathname + '#dashboard');
+        }
+      } catch (e) {}
+
+      var ElementProto = window.Element && window.Element.prototype;
+      if (ElementProto) {
+        var _setAttribute = ElementProto.setAttribute;
+        ElementProto.setAttribute = function (name, value) {
+          try {
+            if (name === 'src' || name === 'href' || name === 'data-src' || name === 'data-href') {
+              value = sanitizeUrl(value);
+            }
+          } catch (e) {}
+          return _setAttribute.call(this, name, value);
+        };
+      }
+
+      function patchProp(Ctor, prop) {
+        if (!Ctor || !Ctor.prototype) return;
+        var desc = Object.getOwnPropertyDescriptor(Ctor.prototype, prop);
+        if (!desc || !desc.set) return;
+        Object.defineProperty(Ctor.prototype, prop, {
+          set: function (v) { return desc.set.call(this, sanitizeUrl(v)); },
+          get: desc.get
+        });
+      }
+      patchProp(HTMLImageElement, 'src');
+      patchProp(HTMLScriptElement, 'src');
+      patchProp(HTMLIFrameElement, 'src');
+      patchProp(HTMLSourceElement, 'src');
+      patchProp(HTMLVideoElement, 'src');
+      patchProp(HTMLAudioElement, 'src');
+      patchProp(HTMLLinkElement, 'href');
+      patchProp(HTMLAnchorElement, 'href');
+
+      var _fetch = window.fetch;
+      if (_fetch) {
+        window.fetch = function (input, init) {
+          try {
+            var url = typeof input === 'string' ? input : (input && input.url) || '';
+            if (BAD.test(String(url))) {
+              console.warn('[PreBoot] fetch bloqueado:', url);
+              return Promise.reject(new Error('URL inválida: /mondial/undefined'));
+            }
+          } catch (e) {}
+          return _fetch.apply(this, arguments);
+        };
+      }
+
+      if (window.XMLHttpRequest) {
+        var _open = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function (method, url) {
+          var s = sanitizeUrl(url);
+          if (s === '#') {
+            console.warn('[PreBoot] XHR bloqueado:', url);
+            throw new Error('URL inválida: /mondial/undefined');
+          }
+          return _open.apply(this, arguments);
+        };
+      }
+
+      function sanitizeNode(node) {
+        if (!(node instanceof Element)) return;
+        var attrs = ['src', 'href', 'data-src', 'data-href'];
+        for (var i = 0; i < attrs.length; i++) {
+          var a = attrs[i];
+          var v = node.getAttribute && node.getAttribute(a);
+          if (v && BAD.test(String(v))) {
+            console.warn('[PreBoot] Removendo nó inválido:', node.outerHTML);
+            node.remove();
+            return;
+          }
+        }
+      }
+      var mo = new MutationObserver(function (muts) {
+        muts.forEach(function (m) {
+          if (m.addedNodes) m.addedNodes.forEach(sanitizeNode);
+          if (m.type === 'attributes' && (m.attributeName === 'src' || m.attributeName === 'href')) {
+            sanitizeNode(m.target);
+          }
+        });
+      });
+      mo.observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['src','href'] });
+
+      var _ps = history.pushState;
+      if (_ps) history.pushState = function (st, tt, url) { return _ps.call(this, st, tt, sanitizeUrl(url)); };
+      var _rs = history.replaceState;
+      if (_rs) history.replaceState = function (st, tt, url) { return _rs.call(this, st, tt, sanitizeUrl(url)); };
+    })();
+    </script>
+    <link rel="stylesheet" href="style.css" />
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
+    <script
+        type="module"
+        src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"
+    ></script>
+</head>
+<body>
+    <div id="global-notification-bar" class="hidden">
+        <div class="notification-content">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notification-text"></span>
+        </div>
+        <button id="close-notification-bar" class="close-button">&times;</button>
+    </div>
+    <div class="app-layout">
+        <div id="sidebar-toggle-btn" class="hidden">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img
+                    src="HORIZONTAL PRETO.png"
+                    alt="Mondial Turismo Logo"
+                    class="logo-img"
+                />
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-module="dashboard">
+                    <i class="fa-solid fa-chart-pie nav-icon"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-module="whatsapp">
+                    <i class="fa-brands fa-whatsapp nav-icon"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="#" class="nav-item" data-module="vendas">
+                    <i class="fa-solid fa-tags nav-icon"></i>
+                    <span>Vendas</span>
+                </a>
+                <a href="#" class="nav-item" data-module="financeiro">
+                    <i class="fa-solid fa-wallet nav-icon"></i>
+                    <span>Financeiro</span>
+                </a>
+
+                <!-- AJUSTE: removidos do menu principal -->
+                <!-- <a href="#" class="nav-item" data-module="clientes"> ... </a> -->
+                <!-- <a href="#" class="nav-item" data-module="fornecedores"> ... </a> -->
+
+                <a href="#" class="nav-item" data-module="configuracoes">
+                    <i class="fa-solid fa-gears nav-icon"></i>
+                    <span>Configurações</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content"></main>
+    </div>
+
+    <div id="servico-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Qual tipo de serviço deseja adicionar?</h2>
+                <button class="close-button">&times;</button>
+            </div>
+            <div id="servico-options" class="modal-body">
+                <button class="service-option" data-type="aereo">
+                    <i class="fa-solid fa-plane-up"></i><span>Aéreo</span>
+                </button>
+                <button class="service-option" data-type="hotel">
+                    <i class="fa-solid fa-hotel"></i><span>Hotel</span>
+                </button>
+                <button class="service-option" data-type="transfer">
+                    <i class="fa-solid fa-van-shuttle"></i
+                    ><span>Transfer / Passeio</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="quick-add-client-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cadastro Rápido de Cliente</h2>
+                <button id="close-quick-add-modal-btn" class="close-button">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="quick-add-client-form">
+                    <div class="form-group">
+                        <label for="quick-client-nome">Nome Completo</label
+                        ><input type="text" id="quick-client-nome" required />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quick-client-cpf">CPF</label
+                            ><input type="text" id="quick-client-cpf" />
+                        </div>
+                        <div class="form-group">
+                            <label for="quick-client-nascimento"
+                                >Data de Nascimento</label
+                            ><input type="date" id="quick-client-nascimento" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quick-client-telefone">Telefone</label
+                            ><input type="tel" id="quick-client-telefone" />
+                        </div>
+                        <div class="form-group">
+                            <label for="quick-client-email">Email</label
+                            ><input type="email" id="quick-client-email" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="save-quick-add-client-btn" type="button" class="primary-button">
+                            Salvar Cliente
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="passageiro-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Selecionar Passageiro</h2>
+                <button id="close-passageiro-modal-btn" class="close-button">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div
+                    class="filters-container"
+                    style="padding: 0 0 1rem 0; border: none"
+                >
+                    <input
+                        type="text"
+                        id="search-passageiro-input"
+                        placeholder="Buscar cliente..."
+                    />
+                </div>
+                <div
+                    id="passageiro-search-results"
+                    class="passageiro-results-list"
+                ></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="voo-modal" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 800px">
+            <div class="modal-header">
+                <h2>Detalhes do Voo</h2>
+                <button id="close-voo-modal-btn" class="close-button">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-voo">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Data</label
+                            ><input type="date" id="voo-data" />
+                        </div>
+                        <div class="form-group">
+                            <label>Cia Aérea</label
+                            ><input
+                                type="text"
+                                id="voo-cia"
+                                placeholder="Ex: GOL, LATAM"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Nº do Voo</label
+                            ><input
+                                type="text"
+                                id="voo-numero"
+                                placeholder="Ex: G3 1234"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Origem</label
+                            ><input
+                                type="text"
+                                id="voo-origem"
+                                placeholder="Ex: BSB"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Destino</label
+                            ><input
+                                type="text"
+                                id="voo-destino"
+                                placeholder="Ex: CGH"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Horário Partida</label
+                            ><input type="time" id="voo-partida" />
+                        </div>
+                        <div class="form-group">
+                            <label>Horário Chegada</label
+                            ><input type="time" id="voo-chegada" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="voo-categoria">
+                                <option value="Economica">Econômica</option>
+                                <option value="Executiva">Executiva</option>
+                                <option value="Promocional">Promocional</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="justify-content: center">
+                            <label
+                                style="
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 0.5rem;
+                                "
+                            >
+                                <input
+                                    type="checkbox"
+                                    id="voo-bagagem"
+                                    style="width: auto"
+                                />
+                                Inclui mala despachada
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="salvar-voo-btn" type="button" class="primary-button">
+                            Adicionar Voo
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="liquidacao-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="liquidacao-modal-title">Liquidar Lançamento</h2>
+                <button id="close-liquidacao-modal-btn" class="close-button">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="liquidacao-form">
+                    <div class="form-group">
+                        <label>Descrição do Lançamento</label>
+                        <p id="liquidacao-descricao" class="info-text"></p>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Valor em Aberto</label>
+                            <p id="liquidacao-valor-aberto" class="info-text"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="liquidacao-valor">Valor a Liquidar</label>
+                            <input type="number" id="liquidacao-valor" step="0.01" required />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="liquidacao-conta">Conta Bancária</label>
+                            <select id="liquidacao-conta" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="liquidacao-data">Data da Liquidação</label>
+                            <input type="date" id="liquidacao-data" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirmar-liquidacao-btn" type="button" class="primary-button">
+                            Confirmar Liquidação
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+    <!-- Serviços e Domínio -->
+    <script src="services/firebaseService.js"></script>
+    <script src="domain/vendasCalculos.js"></script>
+
+    <!-- Módulos -->
+    <script src="modules/dashboard.js"></script>
+    <script src="modules/whatsapp.js"></script>
+    <script src="modules/vendas.js"></script>
+    <script src="modules/vendasForm.js"></script>
+    <script src="modules/clientes.js"></script>
+    <script src="modules/clientesForm.js"></script>
+    <script src="modules/financeiro.js"></script>
+    <script src="modules/financeiroForm.js"></script>
+    <script src="modules/planoContas.js"></script>
+    <script src="modules/contasBancarias.js"></script>
+    <script src="modules/contasBancariasForm.js"></script>
+    <script src="modules/extratoBancario.js"></script>
+    <script src="modules/fornecedores.js"></script>
+    <script src="modules/fornecedoresForm.js"></script>
+
+    <!-- NOVO: módulo de Configurações -->
+    <script src="modules/configuracoes.js"></script>
+
+    <!-- jsPDF (se usado) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- App -->
+    <script src="app.js"></script>
+
+    <script>
+        document.getElementById('close-notification-bar')?.addEventListener('click', () => {
+            document.getElementById('global-notification-bar')?.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
